@@ -3,17 +3,18 @@ using ResoniteAccountDownloader.Models.Adapters;
 using SkyFrost.Base;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 
 namespace ResoniteAccountDownloader.Models;
 
 public class ResoniteDownloadStatus : RefreshableModel, IAccountDownloadStatus
 {
     private AccountMigrationStatus _status;
-    public ResoniteDownloadStatus(AccountMigrationStatus status) {
+    public ResoniteDownloadStatus(AccountMigrationStatus status)
+    {
         _status = status;
         _UserVariablesStatus = new ResoniteVariableDownloadStatus(_status.UserVariablesStatus);
-
+        _UserRecordsStatus = new ResoniteRecordDownloadStatus(_status.UserRecordsStatus);
     }
 
     public int AssetsSkipped { get => _status.MissingAssets.Count; set { } }
@@ -25,7 +26,7 @@ public class ResoniteDownloadStatus : RefreshableModel, IAccountDownloadStatus
     public int DownloadedMessageCount { get => _status.MigratedMessageCount; set { } }
     public string Error { get => _status.Error; set { } }
     public int TotalContactCount { get => _status.TotalContactCount; set { } }
-    
+
 
     public string Phase { get => _status.Phase; set { } }
     public double RecordsPerMinute { get => _status.RecordsPerMinute; set { } }
@@ -44,17 +45,17 @@ public class ResoniteDownloadStatus : RefreshableModel, IAccountDownloadStatus
     public int TotalAssetCount { get => -1; set { } }
     public int TotalDownloadedAssetCount { get => -1; set { } }
 
-    private ResoniteRecordDownloadStatus? _UserRecordsStatus;
+    private ResoniteRecordDownloadStatus _UserRecordsStatus;
     public IRecordDownloadStatus UserRecordsStatus
     {
         get { return _UserRecordsStatus; }
         set { }
     }
 
-    private ResoniteVariableDownloadStatus? _UserVariablesStatus;
+    private ResoniteVariableDownloadStatus _UserVariablesStatus;
     public IVariableDownloadStatus UserVariablesStatus
     {
-        get { return _UserVariablesStatus;}
+        get { return _UserVariablesStatus; }
         set { }
     }
 
@@ -66,17 +67,18 @@ public class ResoniteDownloadStatus : RefreshableModel, IAccountDownloadStatus
         return current / total;
     }
 
-    //TODO
     public float PercentageContacts => Percentage(DownloadedContactCount, TotalContactCount);
     public float PercentageGroups => Percentage(DownloadedGroupCount, TotalGroupCount);
     public float PercentageRecords => Percentage(TotalRecordCount, TotalDownloadedRecordCount);
-    public List<IGroupDownloadStatus> GroupStatuses { get => throw new NotImplementedException(); set { } }
+
+    // TODO: This is a little ugly.
+    public List<IGroupDownloadStatus> GroupStatuses { get => _status.GroupStatuses.Select(s => (IGroupDownloadStatus)new ResoniteGroupDownloadStatus(s)).ToList(); set { } }
 
     // TODO
     // Empty list for now
     public List<IAssetFailure> AssetFailures { get => new List<IAssetFailure>(); set { } }
 
-    
+
     public string GenerateReport()
     {
         //TODO
