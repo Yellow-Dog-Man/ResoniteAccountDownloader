@@ -1,15 +1,17 @@
-# Neos Account Downloader
+# Resonite Account Downloader
 
-A small tool/utility to download your Neos Account contents to your local computer.
+A small tool/utility to download your Resonite Account contents to your local computer.
 
-# Disclaimer
-While every effort is made to download everything from your account, this utility may miss or lose some data. As such we're unable to offer any guarantee or warranty on this application's ability. This is in line with the License but this additional disclaimer is here in the hopes of transparency.
+This is a fork of the [original tool for another platform](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader). The license file reflects this too.
 
-Please refer to the [License](LICENSE.md) file for additional commentary.
+## Why a Fork?
+Resonite takes data privacy seriously, as a part of a user's data rights they have the right to a copy of the data on our platform about them. Resonite has functionality for that in it's AccountDumper tool but that's an unwieldy CLI tool. 
+
+GuVAnj8Gv3RJ's work on the account downloader for another platform was compatible and so a fork was made. This has sped up this item significantly so that the team can focus on other matters.
 
 # Scope
 This repository/software/project aims to do only a limited number of things:
-1. Download the contents of a Neos Account and any groups it is part of to a Local Hard Drive.
+1. Download the contents of a Resonite Account and any groups to a Local Drive.
 1. Store the contents in a way that other software or projects can interact with.
 1. Preserve that contents in a way that allows peace of mind.
 
@@ -17,13 +19,13 @@ We do not intend to process the contents in a way that makes it compatible with 
 
 # Download Instructions
 
-1. Click [this link](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/releases/latest)
+1. Click [this link](https://github.com/Yellow-Dog-Man/ResoniteAccountDownloader/releases/latest)
 2. Scroll to the section of the page that says "Assets".
 3. Click on the Asset(Zip File) that matches your operating system (Windows or Linux) (You **DO NOT** need the source code zips)
 4. It will download
 5. UnZip the downloaded Zip file
 6. Enter the folder from the Zip file
-7. Run the Exe (Neos Account Downloader.exe) by double clicking it.
+7. Run the Exe (Resonite Account Downloader.exe) by double clicking it.
 
 # Contributing
 Thanks for your interest in contributing, there are several ways you can contribute!
@@ -40,36 +42,23 @@ We'd love help with localization.
 
 You have two options when localizing.
 
-### Weblate
-We're trying out Weblate for online localization, it will enable you to localize Neos Account Downloader without downloading anything from right in your browser, it is really cool. You can click the image below to go to our location on Weblate.
-
-[![Translation status](https://hosted.weblate.org/widgets/neos-account-downloader/-/neos-account-downloader-resources/287x66-white.png)](https://hosted.weblate.org/engage/neos-account-downloader/)
-
-There's also a [guide](https://docs.weblate.org/en/latest/user/translating.html) for using weblate available. If you're struggling you can always do the manual method as listed below.
-
-#### Weblate Usernames
-It is recommended to use the same username and email as the one you have here on GitHub when registering/using Weblate. This will ensure that your changes are accredited to your regular GitHub user when they come across from Weblate.
-
 ### Manual
-1. Duplicate: https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/blob/main/AccountDownloader/Properties/Resources.resx
+1. Duplicate: https://github.com/Yellow-Dog-Man/ResoniteAccountDownloader/blob/main/AccountDownloader/Properties/Resources.resx
 1. Save it as Resources.`<your language code>`.resx
 1. Translate
 1. PR it
 
 ## Bug Reporting
-All software has bugs, this software included. Whenever a bug is encountered, please [open an issue](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/issues) the format doesn't really matter provided you clearly explain your problem. Please provide a log file if you can though. We'll get to the bugs as soon as we can.
+All software has bugs, this software included. Whenever a bug is encountered, please [open an issue](https://github.com/Yellow-Dog-Man/ResoniteAccountDownloader/issues) the format doesn't really matter provided you clearly explain your problem. Please provide a log file if you can though. We'll get to the bugs as soon as we can.
 
 ### Where do I find the log files?
 In the top bar menu for the tool click Help -> Open Log Folder. It'll take you right there.
 
-### Can I submit a log file privately?
-Sure, email one to: guvanj8gv3rj.undertook642@passinbox.com . This email goes straight to the authors.
-
 ## Feature Requests
-Feature requests are welcome, please [open an issue](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/issues) where we can discuss the feature request. Do keep in mind our [scope](#scope) though.
+Feature requests are welcome, please [open an issue](https://github.com/Yellow-Dog-Man/ResoniteAccountDownloader/issues) where we can discuss the feature request. Do keep in mind our [scope](#scope) though.
 
 ## Engineering / Programming
-We're happy to accept contributions in the form of PRs, but please [open an issue](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/issues) to discuss your changes before making them. We can talk about suitability, method, approach etc.
+We're happy to accept contributions in the form of PRs, but please [open an issue](https://github.com/Yellow-Dog-Man/ResoniteAccountDownloader/issues) to discuss your changes before making them. We can talk about suitability, method, approach etc.
 
 # FAQ
 
@@ -77,9 +66,9 @@ We're happy to accept contributions in the form of PRs, but please [open an issu
 Follow the [download instructions](#DownloadInstructions).
 
 ## Why does this exist?
-Backing up Neos content given the current circumstances seemed wise.
+Backing up Resonite content is always a good idea.
 
-## Can I restore this download into my Neos Account?
+## Can I restore this download into my Resonite Account?
 No.
 
 ## What can I do with the downloaded files?
@@ -94,7 +83,7 @@ This is not a supported use case of this utility. No effort will be made to supp
 Ideally no, the local store that this app builds will in some cases handle duplicate assets in a way that will reduce total file size if you use the same folder for multiple accounts. The download location can handle as many accounts as needed.
 
 ## Can I run this app for multiple users at the same time?
-Yes, but if you do this, you'll need to use two separate folders which we do not recommend. You may also breach some rate limits Neos has in place on its cloud infrastructure.
+Yes, but if you do this, you'll need to use two separate folders which we do not recommend. You may also breach some rate limits Resonite has in place on its cloud infrastructure.
 
 ## Do subsequent downloads, re-download assets?
 For assets, we skip downloading them if an existing asset is found. This makes many downloads incremental rather than starting from scratch.
@@ -106,7 +95,7 @@ For assets, we skip downloading them if an existing asset is found. If your prog
 This diagram might help:
 ![](docs/AssetsVsNonAssets.png)
 
-- Assets: Anything that makes up an element in Neos that is not the structure of it within the inspector. So Image,Sounds,Videos,Model Files. These are downloaded incrementally
+- Assets: Anything that makes up an element that is not the structure of it within the inspector. So Image,Sounds,Videos,Model Files. These are downloaded incrementally
 - Records: Records contain a manifest of all assets that are required to represent an item or world. These are downloaded each time.
 - Everything Else: JSON Soup. Just JSON Files of various types. Contacts, Messages etc. These are downloaded each time.
 
@@ -118,37 +107,20 @@ At the end of your download you might see asset or record failures.
 
 In both cases, make sure you take a look at the UI scrolling left and right etc. Better UI for this area might be a focus if we continue to see errors. In both events the details are logged to your log files too.
 
-## Why are you anonymous?
-We understand that some of you have felt a degree of apprehension due to us remaining anonymous, citing concerns that we're not an active member of the Neos community. 
-
-This is not the case. We feel the situation surrounding Neos has created some anxiety concerning the future of the projects we've made on this platform, and this downloader is to help mitigate that by providing an opportunity to back up work should the worst come to pass. 
-
-Similarly, other efforts to restore content, such as the Neos wiki edits, have led to account locks for users, denying them the ability to access their assets entirely. This makes it difficult to provide back up options without risking access to the very content it aims to preserve. 
-
-Our anonymity is simply intended to provide a basic level of protection. We hope you can find it a not unreasonable one, and we welcome anyone to investigate the Github to verify the contents of the downloader.
-
-You can also read [Verifying Checksums](#verifying-checksumsintegrity) to double check that what you see on GitHub is what you get.
-
 ## How can we trust this?
 If you'd like to build your trust in this software you can do so in a number of ways:
 1. Read the source code of the repository, there is no hidden code or components
 1. Read [Verifying Checksums](#verifying-checksumsintegrity) which verifies that the builds you obtain are built on GitHub using code on GitHub without outside interference.
-1. Discuss the software with the community, several members of the Neos community including Neos Team members have reviewed this code and confirmed it to be ok.
+1. Discuss the software with the community, several members of the community including Team members have reviewed this code and confirmed it to be ok.
 
-If you have further doubts feel free to [open an issue](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/issues) or a [discussion](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/discussions).
-
-## Can we contact the author privately?
-Sure you can email: guvanj8gv3rj.undertook642@passinbox.com to conduct a private conversation. Our preference is that conversations are kept public in [issues](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/issues) or [discussions](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/discussions).
-
-### What about Discord?
-We do not respond on Discord and use the account purely to post new versions.
+If you have further doubts feel free to [open an issue](https://github.com/Yellow-Dog-Man/ResoniteAccountDownloader/issues) or a [discussion](https://github.com/Yellow-Dog-Man/ResoniteAccountDownloader/discussions).
 
 # Verifying Checksums/Integrity
 
 If you'd like to double check the checksums/integrity of the built Binaries of this project. You can follow these steps:
 1. Download the latest release(1.10.7 onwards) for your operating system
 1. Also download the Checksum for that operating system. It is a text file.
-1. Check the [Actions log](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/actions) for this repository, for the version you downloaded
+1. Check the [Actions log](https://github.com/Yellow-Dog-Man/ResoniteAccountDownloader/actions) for this repository, for the version you downloaded
 1. Locate the "Print Checksum" step
 1. Copy the printed checksum somewhere safe
 1. Now you can check the checksum of the downloaded files.
@@ -163,7 +135,7 @@ This should help to increase trust, that the builds of this tool are not manipul
 If you'd like to read more about this concept, you can read this [Wikipedia article](https://en.wikipedia.org/wiki/File_verification).
 
 # Contributors
-Below is a list of all of the awesome people who have helped to contribute to this software. If you feel you're missed, or that your [contribution types](https://allcontributors.org/docs/en/emoji-key) aren't correct. Please feel free to [open an issue](https://github.com/GuVAnj8Gv3RJ/NeosAccountDownloader/issues).
+Below is a list of all of the awesome people who have helped to contribute to this software. If you feel you're missed, or that your [contribution types](https://allcontributors.org/docs/en/emoji-key) aren't correct. Please feel free to [open an issue](https://github.com/Yellow-Dog-Man/ResoniteAccountDownloader/issues).
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->

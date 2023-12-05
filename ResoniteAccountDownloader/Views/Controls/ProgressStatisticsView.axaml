@@ -1,0 +1,74 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:p="clr-namespace:ResoniteAccountDownloader.Properties"
+             x:Class="ResoniteAccountDownloader.Views.ProgressStatisticsView"
+             xmlns:vm="using:ResoniteAccountDownloader.ViewModels"
+             x:DataType="vm:ProgressStatisticsViewModel"
+             x:CompileBindings="True">
+  <StackPanel>
+    <TextBlock IsVisible="{Binding Config.DownloadContacts}">
+      <TextBlock.Text>
+        <MultiBinding StringFormat="{}{0}: {1} / {2}">
+          <Binding Source="{x:Static p:Resources.Contacts}" />
+          <Binding Path="Status.DownloadedContactCount"/>
+          <Binding Path="Status.TotalContactCount" Converter="{StaticResource ZeroConverter}" ConverterParameter="{x:Static p:Resources.Pending}"/>
+        </MultiBinding>
+      </TextBlock.Text>
+    </TextBlock>
+    <TextBlock IsVisible="{Binding Config.DownloadMessageHistory}">
+      <TextBlock.Text>
+        <MultiBinding StringFormat="{}{0}: {1}">
+          <Binding Source="{x:Static p:Resources.MessageHistory}" />
+          <Binding Path="Status.DownloadedMessageCount" Converter="{StaticResource ZeroConverter}" ConverterParameter="{x:Static p:Resources.Pending}" />
+        </MultiBinding>
+      </TextBlock.Text>
+    </TextBlock>
+    <TextBlock IsVisible="{Binding Config.DownloadCloudVariableDefinitions}">
+      <TextBlock.Text>
+        <MultiBinding StringFormat="{}{0}: {1}">
+          <Binding Source="{x:Static p:Resources.CloudVariableDefinitions}" />
+          <Binding Path="Status.UserVariablesStatus.DownloadedVariableDefinitionCount" />
+        </MultiBinding>
+      </TextBlock.Text>
+    </TextBlock>
+    <TextBlock IsVisible="{Binding Config.DownloadCloudVariables}">
+      <TextBlock.Text>
+        <MultiBinding StringFormat="{}{0}: {1}">
+          <Binding Source="{x:Static p:Resources.CloudVariableValues}" />
+          <Binding Path="Status.UserVariablesStatus.DownloadedVariableCount" />
+        </MultiBinding>
+      </TextBlock.Text>
+    </TextBlock>
+    <TextBlock IsVisible="{Binding Config.DownloadUserRecords}">
+      <TextBlock.Text>
+        <MultiBinding StringFormat="{}{0}: {1} / {2}">
+          <Binding Source="{x:Static p:Resources.InventoryWorlds}" />
+          <Binding Path="Status.TotalDownloadedRecordCount" />
+          <Binding Path="Status.TotalRecordCount" Converter="{StaticResource ZeroConverter}" ConverterParameter="{x:Static p:Resources.Pending}"/>
+        </MultiBinding>
+      </TextBlock.Text>
+    </TextBlock>
+    <TextBlock IsVisible="{Binding Config.DownloadUserRecords}">
+      <TextBlock.Text>
+        <MultiBinding StringFormat="{}{0}: {1} / {2} ({3} {4})">
+          <Binding Source="{x:Static p:Resources.Assets}" />
+          <Binding Path="Status.TotalDownloadedAssetCount" />
+          <Binding Path="Status.TotalAssetCount" Converter="{StaticResource ZeroConverter}" ConverterParameter="{x:Static p:Resources.Pending}"/>
+          <Binding Path="Status.AssetsSkipped" />
+          <Binding Source="{x:Static p:Resources.Skipped}" />
+        </MultiBinding>
+      </TextBlock.Text>
+    </TextBlock>
+    <TextBlock IsVisible="{Binding Config.DownloadUserRecords}">
+      <TextBlock.Text>
+        <MultiBinding StringFormat="{}{0}: {1}">
+          <Binding Source="{x:Static p:Resources.DownloadRate}" />
+          <Binding Path="Status.RecordsPerMinute" Converter="{StaticResource ZeroConverter}" ConverterParameter="{x:Static p:Resources.Pending}" />
+        </MultiBinding>
+      </TextBlock.Text>
+    </TextBlock>
+  </StackPanel>
+</UserControl>
