@@ -23,7 +23,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Copy Contributors
       run: |
-        cp .all-contributorsrc AccountDownloader/Assets
+        cp .all-contributorsrc ResoniteAccountDownloader/Assets
     - name: Build Windows App
       run: |
         cd AccountDownloader
@@ -75,7 +75,7 @@ jobs:
         dotnet-version: 7.0.x
     - name: Copy Contributors
       run: |
-        cp .all-contributorsrc AccountDownloader/Assets
+        cp .all-contributorsrc ResoniteAccountDownloader/Assets
     - name: Build Linux app
       run: |
         cd AccountDownloader
