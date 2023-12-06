@@ -59,8 +59,9 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-guvanj8gv3rj.undertook642@passinbox.com.
+reported to the community leaders responsible for enforcement on our 
+[Moderation Portal](https://moderation.resonite.com). 
+
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the
