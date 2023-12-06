@@ -1,12 +1,14 @@
 name: Release App
 
+# When a release is published
 on:
-  push:
-    tags:
-    - 'v*'
+  release:
+    types: [published]
 
 jobs:
   release-windows:
+    env:
+      VERSION: ${{ github.event.release.tag_name }}
     runs-on: windows-latest
     steps:
     - name: Harden Runner
@@ -25,19 +27,19 @@ jobs:
     - name: Build Windows App
       run: |
         cd AccountDownloader
-        dotnet publish -c Release -r win-x64 --self-contained -p:SourceRevisionId=${{github.run_id}}
+        dotnet publish -c Release -r win-x64 --self-contained -p:SourceRevisionId=${{github.run_id}} -p:Version=${{ env.VERSION }}
     - name: Archive Artifact
       run: |
-        cd AccountDownloader/bin/Release/net7.0/win-x64/publish
+        cd ResoniteAccountDownloader/bin/Release/net7.0/win-x64/publish
         powershell Compress-Archive -Path .\* -DestinationPath AccountDownloaderWindows.zip
     - name: Generate checksum
       uses:  ToxicAven/generate-checksum-file@66708d081e14d5616c5b0920ff9a127f6f499dee # v2
       with:
-        filePath: ./AccountDownloader/bin/Release/net7.0/win-x64/publish/AccountDownloaderWindows.zip
-        saveFile: checksum-${{github.ref_name}}-${{github.run_id}}-windows.txt
+        filePath: ./ResoniteAccountDownloader/bin/Release/net7.0/win-x64/publish/AccountDownloaderWindows.zip
+        saveFile: checksum-${{ env.VERSION }}-${{github.run_id}}-windows.txt
         algorithm: 'sha256'
     - name: Print Checksum
-      run: type checksum-${{github.ref_name}}-${{github.run_id}}-windows.txt
+      run: type checksum-${{ env.VERSION }}-${{github.run_id}}-windows.txt
     - name: Upload Release Asset
       id: upload-release-asset
       uses: svenstaro/upload-release-action@1beeb572c19a9242f4361f4cee78f8e0d9aec5df # v2
@@ -46,8 +48,8 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: ./AccountDownloader/bin/Release/net7.0/win-x64/publish/AccountDownloaderWindows.zip
-        asset_name: AccountDownloaderWindows-${{github.ref_name}}.zip
+        file: ./ResoniteAccountDownloader/bin/Release/net7.0/win-x64/publish/AccountDownloaderWindows.zip
+        asset_name: AccountDownloaderWindows-${{ env.VERSION }}.zip
     - name: Upload Checksum
       uses: svenstaro/upload-release-action@1beeb572c19a9242f4361f4cee78f8e0d9aec5df # v2
       env:
@@ -55,9 +57,11 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: checksum-${{github.ref_name}}-${{github.run_id}}-windows.txt
+        file: checksum-${{ env.VERSION }}-${{github.run_id}}-windows.txt
   release-linux:
     runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.event.release.tag_name }}
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@eb238b55efaa70779f274895e782ed17c84f2895 # v2.6.1
@@ -75,19 +79,19 @@ jobs:
     - name: Build Linux app
       run: |
         cd AccountDownloader
-        dotnet publish -c Release -r linux-x64 --self-contained=true -p:SourceRevisionId=${{github.run_id}}
+        dotnet publish -c Release -r linux-x64 --self-contained=true -p:SourceRevisionId=${{github.run_id}} -p:Version=${{ env.VERSION }}
     - name: Archive Artifact
       run: |
-        cd AccountDownloader/bin/Release/net7.0/linux-x64/publish
+        cd ResoniteAccountDownloader/bin/Release/net7.0/linux-x64/publish
         tar -czvf AccountDownloaderLinux.tar.gz ./*
     - name: Generate checksum
       uses:  ToxicAven/generate-checksum-file@66708d081e14d5616c5b0920ff9a127f6f499dee # v2
       with:
-        filePath: AccountDownloader/bin/Release/net7.0/linux-x64/publish/AccountDownloaderLinux.tar.gz
-        saveFile: checksum-${{github.ref_name}}-${{github.run_id}}-linux.txt
+        filePath: ResoniteAccountDownloader/bin/Release/net7.0/linux-x64/publish/AccountDownloaderLinux.tar.gz
+        saveFile: checksum-${{ env.VERSION }}-${{github.run_id}}-linux.txt
         algorithm: 'sha256'
     - name: Print Checksum
-      run: cat checksum-${{github.ref_name}}-${{github.run_id}}-linux.txt
+      run: cat checksum-${{ env.VERSION }}-${{github.run_id}}-linux.txt
     - name: Upload Release Asset
       id: upload-release-asset
       uses: svenstaro/upload-release-action@1beeb572c19a9242f4361f4cee78f8e0d9aec5df # v2
@@ -96,8 +100,8 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: AccountDownloader/bin/Release/net7.0/linux-x64/publish/AccountDownloaderLinux.tar.gz
-        asset_name: AccountDownloaderLinux-${{github.ref_name}}.tar.gz
+        file: ResoniteAccountDownloader/bin/Release/net7.0/linux-x64/publish/AccountDownloaderLinux.tar.gz
+        asset_name: AccountDownloaderLinux-${{ env.VERSION }}.tar.gz
     - name: Upload Checksum
       uses: svenstaro/upload-release-action@1beeb572c19a9242f4361f4cee78f8e0d9aec5df # v2
       env:
@@ -105,4 +109,4 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: checksum-${{github.ref_name}}-${{github.run_id}}-linux.txt
+        file: checksum-${{ env.VERSION }}-${{github.run_id}}-linux.txt
