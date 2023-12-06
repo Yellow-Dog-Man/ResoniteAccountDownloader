@@ -101,8 +101,8 @@
     <Reference Include="Elements.Assets">
       <HintPath>..\ExternalLibraries\Elements.Assets.dll</HintPath>
     </Reference>
-    <Reference Include="Skyfrost.Base">
-      <HintPath>..\ExternalLibraries\Skyfrost.Base.dll</HintPath>
+    <Reference Include="SkyFrost.Base">
+      <HintPath>..\ExternalLibraries\SkyFrost.Base.dll</HintPath>
     </Reference>
 
     <!-- Reference some dependencies that Elements.Core/SkyFrost needs -->
