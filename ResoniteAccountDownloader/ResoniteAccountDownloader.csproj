@@ -50,7 +50,7 @@
     <Content Include="Assets\AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.6" />
+    <PackageReference Include="Avalonia" Version="11.0.7" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
 
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.5" />
@@ -82,7 +82,7 @@
     <!-- Avalonia addons -->
     <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.2.1" />
     <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />
-    <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.10.3" />
+    <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.10.5" />
 
     <!-- Generator Stuff -->
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.23525.2">
