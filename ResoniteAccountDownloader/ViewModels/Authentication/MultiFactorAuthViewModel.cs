@@ -21,7 +21,7 @@ public class MultiFactorAuthViewModel : ViewModelBase, IValidatableViewModel
 
     public ReactiveCommand<Unit, AuthResult> SubmitTOTP { get; set; }
 
-    public ValidationContext ValidationContext { get; } = new ValidationContext();
+    public IValidationContext ValidationContext { get; } = new ValidationContext();
 
     public Interaction<string?, Unit> ShowError { get; }
 

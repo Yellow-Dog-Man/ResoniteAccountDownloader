@@ -20,7 +20,7 @@ public class LoginViewModel : ViewModelBase, IValidatableViewModel
     [Reactive]
     public string Password { get; set; } = string.Empty;
 
-    public ValidationContext ValidationContext { get; } = new ValidationContext();
+    public IValidationContext ValidationContext { get; } = new ValidationContext();
 
     public ReactiveCommand<Unit, AuthResult> Login { get; set; }
 
