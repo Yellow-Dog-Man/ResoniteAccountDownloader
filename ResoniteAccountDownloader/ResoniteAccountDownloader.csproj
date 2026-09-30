@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -50,42 +50,42 @@
     <Content Include="Assets\AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.6" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
+    <PackageReference Include="Avalonia" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.3" />
 
-    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.5" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.6" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="12.0.0" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
 
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.6" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.6" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="12.1.3" />
 
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.22" />
 
     <!-- Reactive UI Stuff-->
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
-    <PackageReference Include="Enums.NET" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="ReactiveUI.Fody" Version="19.5.31" />
-    <PackageReference Include="ReactiveUI.Validation" Version="3.1.7" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.8" />
+    <PackageReference Include="Enums.NET" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.12" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
+    <PackageReference Include="ReactiveUI.Validation" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
 
-    <PackageReference Include="Splat" Version="14.8.12" />
+    <PackageReference Include="Splat" Version="21.0.0" />
 
     <!-- Logging -->
-    <PackageReference Include="Serilog" Version="3.1.2-dev-02097" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.1-dev-10370" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00968" />
+    <PackageReference Include="Serilog" Version="4.4.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageReference Include="SerilogTraceListener" Version="3.2.1-dev-00011" />
 
     <!-- Avalonia addons -->
-    <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.2.1" />
-    <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />
-    <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.10.3" />
+    <PackageReference Include="AsyncImageLoader.Avalonia" Version="4.0.0" />
+    <PackageReference Include="MessageBox.Avalonia" Version="12.0.0" />
+    <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.11.0" />
 
     <!-- Generator Stuff -->
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.23525.2">
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="5.9.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -107,12 +107,12 @@
 
     <!-- Reference some dependencies that Elements.Core/SkyFrost needs -->
     <!-- TODO: Is there a smarterway to include them? -->
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
-    <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
-    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="8.0.0" />
-    <PackageReference Include="Octokit" Version="9.0.0" />
+    <PackageReference Include="System.Text.Json" Version="10.0.12" />
+    <PackageReference Include="System.Security.Permissions" Version="10.0.12" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="10.0.12" />
+    <PackageReference Include="Octokit" Version="14.0.0" />
     <PackageReference Include="SignalR.Strong" Version="0.3.0.0" />
-    <PackageReference Include="MessageFormat" Version="7.1.0" />
+    <PackageReference Include="MessageFormat" Version="8.0.0" />
     <PackageReference Include="Ben.Demystifier" Version="0.4.1" />
 
   </ItemGroup>
