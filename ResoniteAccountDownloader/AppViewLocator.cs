@@ -4,6 +4,7 @@ using ReactiveUI;
 using Avalonia.Controls.Templates;
 using Avalonia.Controls;
 using AccountOperationUtilities.Generators;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ResoniteAccountDownloader;
 
@@ -22,6 +23,17 @@ public partial class AppViewLocator : IViewLocator, IDataTemplate
             return (IViewFor?) c;
 
         return null;
+    }
+
+    public IViewFor<TViewModel>? ResolveView<TViewModel>(string? contract = null) where TViewModel : class
+    {
+        return ResolveView<TViewModel>(contract);
+    }
+
+    [RequiresUnreferencedCode("")] //TODO: I don't know what you're meant to put here
+    public IViewFor? ResolveView(object? instance, string? contract = null)
+    {
+        return ResolveView(instance, contract);
     }
 
     public bool Match(object? data) => data is ViewModelBase;
