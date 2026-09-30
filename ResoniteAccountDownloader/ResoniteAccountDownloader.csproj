@@ -44,14 +44,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="12.1.3" />
-    <PackageReference Include="Avalonia.Desktop" Version="12.1.3" />
+    <PackageReference Include="Avalonia" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.22" />
 
-    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="12.0.0" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.13" />
 
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.3" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="12.1.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.3.22" />
 
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.22" />
@@ -62,10 +62,11 @@
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
-    <PackageReference Include="ReactiveUI.Validation" Version="7.1.0" />
+    <!-- Avalonia.ReactiveUI 11.x is built against ReactiveUI 20 / Splat 15; newer versions fail at runtime (MissingMethodException) -->
+    <PackageReference Include="ReactiveUI.Validation" Version="4.1.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
 
-    <PackageReference Include="Splat" Version="21.0.0" />
+    <PackageReference Include="Splat" Version="15.5.3" />
 
     <!-- Logging -->
     <PackageReference Include="Serilog" Version="4.4.0" />
@@ -74,9 +75,9 @@
     <PackageReference Include="SerilogTraceListener" Version="3.2.1-dev-00011" />
 
     <!-- Avalonia addons -->
-    <PackageReference Include="AsyncImageLoader.Avalonia" Version="4.0.0" />
-    <PackageReference Include="MessageBox.Avalonia" Version="12.0.0" />
-    <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.11.0" />
+    <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.7.0" />
+    <PackageReference Include="MessageBox.Avalonia" Version="3.3.1.1" />
+    <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.10.10" />
 
     <PackageReference Include="YellowDogMan.Hardware.Info" Version="11.1.0-ydm-0.1.0" />
 
