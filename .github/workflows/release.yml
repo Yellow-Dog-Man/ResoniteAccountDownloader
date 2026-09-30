@@ -17,10 +17,10 @@ jobs:
         egress-policy: audit
 
     - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
-    - name: Setup .NET 7
+    - name: Setup .NET 10
       uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 10.0.x
     - name: Copy Contributors
       run: |
         cp .all-contributorsrc ResoniteAccountDownloader/Assets
@@ -30,12 +30,12 @@ jobs:
         dotnet publish -c Release -r win-x64 --self-contained -p:SourceRevisionId=${{github.run_id}} -p:Version=${{ env.VERSION }}
     - name: Archive Artifact
       run: |
-        cd ResoniteAccountDownloader/bin/Release/net7.0/win-x64/publish
+        cd ResoniteAccountDownloader/bin/Release/net10.0/win-x64/publish
         powershell Compress-Archive -Path .\* -DestinationPath AccountDownloaderWindows.zip
     - name: Generate checksum
       uses:  ToxicAven/generate-checksum-file@66708d081e14d5616c5b0920ff9a127f6f499dee # v2
       with:
-        filePath: ./ResoniteAccountDownloader/bin/Release/net7.0/win-x64/publish/AccountDownloaderWindows.zip
+        filePath: ./ResoniteAccountDownloader/bin/Release/net10.0/win-x64/publish/AccountDownloaderWindows.zip
         saveFile: checksum-${{ env.VERSION }}-${{github.run_id}}-windows.txt
         algorithm: 'sha256'
     - name: Print Checksum
@@ -48,7 +48,7 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: ./ResoniteAccountDownloader/bin/Release/net7.0/win-x64/publish/AccountDownloaderWindows.zip
+        file: ./ResoniteAccountDownloader/bin/Release/net10.0/win-x64/publish/AccountDownloaderWindows.zip
         asset_name: AccountDownloaderWindows-${{ env.VERSION }}.zip
     - name: Upload Checksum
       uses: svenstaro/upload-release-action@1beeb572c19a9242f4361f4cee78f8e0d9aec5df # v2
@@ -69,10 +69,10 @@ jobs:
         egress-policy: audit
 
     - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
-    - name: Setup .NET 7
+    - name: Setup .NET 10
       uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 10.0.x
     - name: Copy Contributors
       run: |
         cp .all-contributorsrc ResoniteAccountDownloader/Assets
@@ -82,12 +82,12 @@ jobs:
         dotnet publish -c Release -r linux-x64 --self-contained=true -p:SourceRevisionId=${{github.run_id}} -p:Version=${{ env.VERSION }}
     - name: Archive Artifact
       run: |
-        cd ResoniteAccountDownloader/bin/Release/net7.0/linux-x64/publish
+        cd ResoniteAccountDownloader/bin/Release/net10.0/linux-x64/publish
         tar -czvf AccountDownloaderLinux.tar.gz ./*
     - name: Generate checksum
       uses:  ToxicAven/generate-checksum-file@66708d081e14d5616c5b0920ff9a127f6f499dee # v2
       with:
-        filePath: ResoniteAccountDownloader/bin/Release/net7.0/linux-x64/publish/AccountDownloaderLinux.tar.gz
+        filePath: ResoniteAccountDownloader/bin/Release/net10.0/linux-x64/publish/AccountDownloaderLinux.tar.gz
         saveFile: checksum-${{ env.VERSION }}-${{github.run_id}}-linux.txt
         algorithm: 'sha256'
     - name: Print Checksum
@@ -100,7 +100,7 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ github.ref }}
-        file: ResoniteAccountDownloader/bin/Release/net7.0/linux-x64/publish/AccountDownloaderLinux.tar.gz
+        file: ResoniteAccountDownloader/bin/Release/net10.0/linux-x64/publish/AccountDownloaderLinux.tar.gz
         asset_name: AccountDownloaderLinux-${{ env.VERSION }}.tar.gz
     - name: Upload Checksum
       uses: svenstaro/upload-release-action@1beeb572c19a9242f4361f4cee78f8e0d9aec5df # v2
