@@ -66,7 +66,7 @@ namespace ResoniteAccountDownloader
 
             var version = resolve.GetService<IAssemblyInfoService>();
             // Registering this as non-lazy because it is quite slow to init.
-            services.RegisterConstant(new SkyFrostInterface(UID.Compute(), SkyFrostConfig.DEFAULT_PRODUCTION.WithUserAgent(version?.NameNoSpaces).WithoutSignalR()));
+            services.RegisterConstant(new SkyFrostInterface(UID.Compute(), Guid.CreateVersion7().ToString(),SkyFrostConfig.DEFAULT_PRODUCTION.WithUserAgent(version?.NameNoSpaces).WithoutSignalR()));
 
             services.RegisterLazySingleton<IAppCloudService>(() => new SkyFrostCloudService(resolve.GetService<SkyFrostInterface>(), resolve.GetService<ILogger>()));
 

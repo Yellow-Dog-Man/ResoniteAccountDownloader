@@ -47,6 +47,14 @@
         </TextBlock.Text>
       </TextBlock>
     </StackPanel>
+    <TextBlock HorizontalAlignment="Left">
+      <TextBlock.Text>
+        <MultiBinding StringFormat="{}{0} :{1}">
+          <Binding Source="{x:Static p:Resources.DotNetVersion}" />
+          <Binding Path="DotNetVersion" />
+        </MultiBinding>
+      </TextBlock.Text>
+    </TextBlock>
     <TextBlock Text="{x:Static p:Resources.BasedOnOriginalWork}" />
     <TextBlock Text="{x:Static p:Resources.WithContributionsFrom}" />
     <ScrollViewer Height="160" AllowAutoHide="False">
