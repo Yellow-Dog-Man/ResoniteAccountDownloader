@@ -12,17 +12,18 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace AccountOperationUtilities.Generators;
 
 [Generator]
-public class StaticViewLocatorGenerator : ISourceGenerator
+public class StaticViewLocatorGenerator : IIncrementalGenerator
 {
     private const string RootNameSpace = "AccountOperationUtilities.Generators";
     private const string StaticViewLocatorAttributeDisplayString = RootNameSpace + ".StaticViewLocatorAttribute";
@@ -31,33 +32,69 @@ public class StaticViewLocatorGenerator : ISourceGenerator
 
     private const string ViewSuffix = "View";
 
-    public void Initialize(GeneratorInitializationContext context)
+    private enum CandidateKind
     {
-        context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
+        None,
+        Locator,
+        ViewModel,
     }
 
-    public void Execute(GeneratorExecutionContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        if (context.SyntaxContextReceiver is not SyntaxReceiver receiver)
+        var candidates = context.SyntaxProvider
+            .CreateSyntaxProvider(
+                static (node, _) => node is ClassDeclarationSyntax,
+                static (ctx, ct) => Classify(ctx, ct))
+            .Where(static x => x.Kind != CandidateKind.None);
+
+        var combined = candidates.Collect().Combine(context.CompilationProvider);
+
+        context.RegisterSourceOutput(combined, static (spc, source) => Execute(spc, source.Right, source.Left));
+    }
+
+    private static (INamedTypeSymbol? Symbol, CandidateKind Kind) Classify(GeneratorSyntaxContext context, CancellationToken cancellationToken)
+    {
+        var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
+        if (context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax, cancellationToken) is not INamedTypeSymbol namedTypeSymbol)
+        {
+            return (null, CandidateKind.None);
+        }
+
+        if (namedTypeSymbol.GetAttributes().Any(ad => ad?.AttributeClass?.ToDisplayString() == StaticViewLocatorAttributeDisplayString))
+        {
+            return (namedTypeSymbol, CandidateKind.Locator);
+        }
+
+        if (namedTypeSymbol.Name.EndsWith(ViewModelSuffix) && !namedTypeSymbol.IsAbstract)
+        {
+            return (namedTypeSymbol, CandidateKind.ViewModel);
+        }
+
+        return (null, CandidateKind.None);
+    }
+
+    private static void Execute(SourceProductionContext context, Compilation compilation, ImmutableArray<(INamedTypeSymbol? Symbol, CandidateKind Kind)> candidates)
+    {
+        if (compilation.GetTypeByMetadataName(StaticViewLocatorAttributeDisplayString) is null)
         {
             return;
         }
 
-        var attributeSymbol = context.Compilation.GetTypeByMetadataName(StaticViewLocatorAttributeDisplayString);
-        if (attributeSymbol is null)
+        var locators = candidates.Where(x => x.Kind == CandidateKind.Locator).Select(x => x.Symbol!).ToList();
+        if (locators.Count == 0)
         {
             return;
         }
 
-        foreach (var namedTypeSymbol in receiver.NamedTypeSymbolLocators)
-        {
-            var namedTypeSymbolViewModels = receiver.NamedTypeSymbolViewModels.ToList();
-            namedTypeSymbolViewModels.Sort((x, y) => x.ToDisplayString().CompareTo(y.ToDisplayString()));
+        var viewModels = candidates.Where(x => x.Kind == CandidateKind.ViewModel).Select(x => x.Symbol!).ToList();
+        viewModels.Sort((x, y) => string.CompareOrdinal(x.ToDisplayString(), y.ToDisplayString()));
 
-            var classSource = ProcessClass(context.Compilation, namedTypeSymbol, namedTypeSymbolViewModels);
+        foreach (var locator in locators)
+        {
+            var classSource = ProcessClass(compilation, locator, viewModels);
             if (classSource is not null)
             {
-                context.AddSource($"{namedTypeSymbol.Name}_StaticViewLocator.cs", SourceText.From(classSource, Encoding.UTF8));
+                context.AddSource($"{locator.Name}_StaticViewLocator.cs", SourceText.From(classSource, Encoding.UTF8));
             }
         }
     }
@@ -119,37 +156,5 @@ namespace {namespaceNameLocator}
 }}");
 
         return source.ToString();
-    }
-
-    private class SyntaxReceiver : ISyntaxContextReceiver
-    {
-        public List<INamedTypeSymbol> NamedTypeSymbolLocators { get; } = new();
-
-        public List<INamedTypeSymbol> NamedTypeSymbolViewModels { get; } = new();
-
-        public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
-        {
-            if (context.Node is ClassDeclarationSyntax classDeclarationSyntax)
-            {
-                var namedTypeSymbol = context.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax);
-                if (namedTypeSymbol is null)
-                {
-                    return;
-                }
-
-                var attributes = namedTypeSymbol.GetAttributes();
-                if (attributes.Any(ad => ad?.AttributeClass?.ToDisplayString() == StaticViewLocatorAttributeDisplayString))
-                {
-                    NamedTypeSymbolLocators.Add(namedTypeSymbol);
-                }
-                else if (namedTypeSymbol.Name.EndsWith(ViewModelSuffix))
-                {
-                    if (!namedTypeSymbol.IsAbstract)
-                    {
-                        NamedTypeSymbolViewModels.Add(namedTypeSymbol);
-                    }
-                }
-            }
-        }
     }
 }
