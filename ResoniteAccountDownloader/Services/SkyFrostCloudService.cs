@@ -17,7 +17,7 @@ public class SkyFrostCloudService : IAppCloudService
 
     public SkyFrostCloudService(SkyFrostInterface? cloudInterface, ILogger? logger)
     {
-        _id = Guid.NewGuid().ToString();
+        _id = Guid.CreateVersion7().ToString();
         _interface = cloudInterface ?? throw new NullReferenceException("Cannot run without a Resonite Account Downloader Interface");
         this.logger = logger ?? throw new NullReferenceException("Cannot run without a Logger");
 
@@ -39,7 +39,8 @@ public class SkyFrostCloudService : IAppCloudService
     public async Task<AuthResult> Login(string login, string password)
     {
         this.logger.LogInformation("Logging in user: {user}", login);
-        var loginResult = await _interface.Session.Login(login, new PasswordLogin() { Password=password}, _id, false, null).ConfigureAwait(false);
+
+        var loginResult = await _interface.Session.Login(login, new PasswordLogin(password), _id, false, null).ConfigureAwait(false);
         _login = login;
         _password = password;
         return ProcessLoginResult(loginResult);
