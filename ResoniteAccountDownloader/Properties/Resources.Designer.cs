@@ -115,15 +115,6 @@ namespace ResoniteAccountDownloader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Based on original work from: GuVAnj8Gv3RJ.
-        /// </summary>
-        public static string BasedOnOriginalWork {
-            get {
-                return ResourceManager.GetString("BasedOnOriginalWork", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {

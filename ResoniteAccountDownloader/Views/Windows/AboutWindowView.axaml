@@ -55,7 +55,6 @@
         </MultiBinding>
       </TextBlock.Text>
     </TextBlock>
-    <TextBlock Text="{x:Static p:Resources.BasedOnOriginalWork}" />
     <TextBlock Text="{x:Static p:Resources.WithContributionsFrom}" />
     <ScrollViewer Height="160" AllowAutoHide="False">
       <ItemsRepeater ItemsSource="{Binding Contributors}:">
