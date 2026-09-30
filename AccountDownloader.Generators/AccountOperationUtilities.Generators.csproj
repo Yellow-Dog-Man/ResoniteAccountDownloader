@@ -1,19 +1,15 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <!-- The source generator project needs to target the netstandard2.0 TFM, otherwise it will not work.-->
     <TargetFramework>netstandard2.0</TargetFramework>
-		<AnalysisLevel>latest</AnalysisLevel>
-		<Nullable>enable</Nullable>
-		<LangVersion>latest</LangVersion>
-    
-		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-		<RuntimeIdentifiers>win7-x64;linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
-    
-		<IsRoslynComponent>true</IsRoslynComponent>
-    
-		<Configurations>Debug;Release;ReleaseNative</Configurations>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <IsRoslynComponent>true</IsRoslynComponent>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <Configurations>Debug;Release;ReleaseNative</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
