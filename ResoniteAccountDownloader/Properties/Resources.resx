@@ -336,7 +336,7 @@
   <data name="RecordAuditLog" xml:space="preserve">
     <value>Record Audit Log</value>
   </data>
-  <data name="BasedOnOriginalWork" xml:space="preserve">
-    <value>Based on original work from: GuVAnj8Gv3RJ</value>
+  <data name="DotNetVersion" xml:space="preserve">
+    <value>.NET Version</value>
   </data>
 </root>

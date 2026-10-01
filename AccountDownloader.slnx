@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="ReleaseNative" />
+  </Configurations>
+  <Project Path="AccountDownloader.Generators/AccountOperationUtilities.Generators.csproj" />
+  <Project Path="AccountOperationUtilities/AccountOperationUtilities.csproj">
+    <BuildType Solution="ReleaseNative|*" Project="Release" />
+  </Project>
+  <Project Path="ResoniteAccountDownloader/ResoniteAccountDownloader.csproj" />
+  <Properties Name="ExtensibilityGlobals" Scope="PostLoad">
+    <Property Name="RESX_ShowErrorsInErrorList" Value="True" />
+    <Property Name="RESX_TaskErrorCategory" Value="Message" />
+  </Properties>
+</Solution>

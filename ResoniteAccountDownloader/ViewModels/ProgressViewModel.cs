@@ -3,7 +3,6 @@ using ResoniteAccountDownloader.Utilities;
 using ResoniteAccountDownloader.Views;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -48,10 +47,11 @@ public class ProgressViewModel : ViewModelBase
     private IAppCloudService CloudService { get; }
     private IAccountDownloader Downloader { get; }
 
-    public ProgressViewModel(IAccountDownloadConfig config)
+    public ProgressViewModel(IScreen hostScreen, IViewModelFactory viewModels, IAppCloudService cloudService, IAccountDownloader downloader, IAccountDownloadConfig config)
+        : base(hostScreen, viewModels)
     {
-        CloudService = Locator.Current.GetService<IAppCloudService>() ?? throw new NullReferenceException("Cannot login without an app service");
-        Downloader = Locator.Current.GetService<IAccountDownloader>() ?? throw new NullReferenceException("Cannot download an account without a downloader");
+        CloudService = cloudService;
+        Downloader = downloader;
 
         ProfileViewModel = new UserProfileViewModel(CloudService.Profile);
 
@@ -109,13 +109,13 @@ public class ProgressViewModel : ViewModelBase
     private async Task HandleCancel()
     {
         await GlobalInteractions.ShowMessageBox.Handle(new MessageBoxRequest(Res.Errors_DownloadCancelled));
-        await Router.Navigate.Execute(new GettingStartedViewModel());
+        await Navigate<GettingStartedViewModel>();
     }
 
     private async Task HandleFailure(IDownloadResult result)
     {
         await GlobalInteractions.ShowMessageBox.Handle(new MessageBoxRequest(string.Format(Res.Errors_DownloadFailure, result.Error)));
-        await Router.Navigate.Execute(new GettingStartedViewModel());
+        await Navigate<GettingStartedViewModel>();
     }
 
     private async Task HandleSucces()
@@ -123,7 +123,7 @@ public class ProgressViewModel : ViewModelBase
 
         await GlobalInteractions.ShowMessageBox.Handle(new MessageBoxRequest(Res.DownloadComplete));
 
-        await Router.Navigate.Execute(new CompleteViewModel(Config, Status!));
+        await Navigate<CompleteViewModel>(Config, Status!);
     }
 
     private void SetProgressText(string text)

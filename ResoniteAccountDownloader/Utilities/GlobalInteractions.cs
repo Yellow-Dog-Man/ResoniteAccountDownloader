@@ -1,4 +1,5 @@
 ﻿using ResoniteAccountDownloader.Views;
+using ResoniteAccountDownloader.ViewModels;
 using Avalonia.Controls;
 using ReactiveUI;
 using System.Reactive;
@@ -29,6 +30,6 @@ namespace ResoniteAccountDownloader.Utilities
         public static readonly Interaction<WindowClosingEventArgs, bool> OnMainWindowClose = new Interaction<WindowClosingEventArgs, bool>();
 
         public static readonly Interaction<string, Unit> OpenFolderLocation = new Interaction<string, Unit>();
-        public static readonly Interaction<Unit, Unit> ShowAboutWindow = new Interaction<Unit, Unit>();
+        public static readonly Interaction<AboutWindowViewModel, Unit> ShowAboutWindow = new Interaction<AboutWindowViewModel, Unit>();
     }
 }

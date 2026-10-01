@@ -1,5 +1,5 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace ResoniteAccountDownloader.Services
 {
@@ -10,6 +10,8 @@ namespace ResoniteAccountDownloader.Services
         string Name { get; }
 
         string NameNoSpaces { get; }
+
+        string DotNetVersion { get; }
     }
     public class AssemblyInfoService : IAssemblyInfoService
     {
@@ -23,6 +25,8 @@ namespace ResoniteAccountDownloader.Services
             CompanyName = company?.Company ?? "Unknown";
             Name = info.GetName().Name ?? "Unknown";
 
+            DotNetVersion = RuntimeInformation.FrameworkDescription;
+
         }
         public string NameNoSpaces => Name.Replace(" ", "");
         public string Version { get; }
@@ -30,5 +34,7 @@ namespace ResoniteAccountDownloader.Services
         public string CompanyName { get; }
 
         public string Name { get; }
+
+        public string DotNetVersion { get; }
     }
 }

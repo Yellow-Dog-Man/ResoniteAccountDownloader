@@ -29,15 +29,19 @@ public class ResoniteAccountDownloadManager : IAccountDownloader
     private CancellationTokenSource? CancelTokenSource = null;
 
     private readonly ILogger Logger;
+    private readonly ILoggerFactory LogFactory;
+    private readonly IIdService IdGen;
 
     private readonly DispatcherTimer StatsTimer = new();
 
-    public ResoniteAccountDownloadManager(SkyFrostInterface? cloudInterface, ILogger? logger)
+    public ResoniteAccountDownloadManager(SkyFrostInterface cloudInterface, ILogger<ResoniteAccountDownloadManager> logger, ILoggerFactory loggerFactory, IIdService idGen)
     {
-        Logger = logger ?? throw new NullReferenceException("Cannot run without a logger"); ;
-        Interface = cloudInterface ?? throw new NullReferenceException("Cannot run without a Resonite Account Downloader Interface");
+        Logger = logger;
+        LogFactory = loggerFactory;
+        Interface = cloudInterface;
         StatsTimer.Interval = TimeSpan.FromSeconds(1);
         StatsTimer.Tick += StatsTimer_Tick;
+        IdGen = idGen;
     }
 
     private void StatsTimer_Tick(object? sender, EventArgs e)
@@ -80,8 +84,8 @@ public class ResoniteAccountDownloadManager : IAccountDownloader
 
         // We do not include the user's username here as Resonite Account Downloader takes care of this.
         // It'll store items owned by a user in a folder based on their User ID.
-        var local = new SkyFrost.Base.LocalAccountDataStore(Interface.Platform, Interface.CurrentUser.Id, config.FilePath, config.FilePath + "/Assets");
-        Controller = new SkyFrost.Base.AccountTransferController(new SkyFrost.Base.CloudAccountDataStore(Interface), local, Guid.NewGuid().ToString(), libraryConfig);
+        var local = new LocalAccountDataStore(Interface.Platform, Interface.CurrentUser.Id, config.FilePath, config.FilePath + "/Assets");
+        Controller = new AccountTransferController(new CloudAccountDataStore(Interface, LogFactory.CreateLogger<CloudAccountDataStore>()), local, IdGen.CreateId(), libraryConfig);
         Controller.ProgressMessagePosted += SurfaceProgressMessage;
 
         // Wrap the Status Model.

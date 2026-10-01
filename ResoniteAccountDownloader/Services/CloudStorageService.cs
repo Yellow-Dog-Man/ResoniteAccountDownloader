@@ -2,6 +2,7 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
+using Microsoft.Extensions.Logging;
 using AccountOperationUtilities.Interfaces;
 using ResoniteAccountDownloader.Models.Adapters;
 
@@ -54,13 +55,8 @@ namespace ResoniteAccountDownloader.Services
     {
         private SkyFrostInterface Interface { get; }
         private ILogger Logger { get; }
-        public CloudStorageService(SkyFrostInterface? _interface, ILogger? logger)
+        public CloudStorageService(SkyFrostInterface _interface, ILogger<CloudStorageService> logger)
         {
-            if (_interface == null)
-                throw new ArgumentNullException(nameof(_interface));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             Logger = logger;
             Interface = _interface;
         }
@@ -68,13 +64,13 @@ namespace ResoniteAccountDownloader.Services
         public IStorageRecord GetUserStorage()
         {
             var storage = new ReactiveStorageRecord(Interface.CurrentUser.Id, OwnerType.User);
-            IUser user = ResoniteUserAdapter.FromResoniteUser(Interface.CurrentUser);
+            IUser user = ResoniteUserAdapter.FromResoniteUser(Interface.CurrentUser, Interface);
             storage.Update(user.UsedBytes, user.QuotaBytes);
             Interface.Session.UserUpdated += (User user) =>
             {
                 if (user == null)
                     return;
-                storage.Update(ResoniteUserAdapter.FromResoniteUser(user));
+                storage.Update(ResoniteUserAdapter.FromResoniteUser(user, Interface));
             };
 
             return storage;

@@ -16,7 +16,7 @@ namespace ResoniteAccountDownloader.Services
         public List<Contributor>? Contributors => file?.Contributors;
         private readonly ContributorsFile? file;
 
-        public ContributionsService(ILogger? logger)
+        public ContributionsService(ILogger<ContributionsService> logger)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace ResoniteAccountDownloader.Services
             }
             catch(Exception e)
             {
-                logger?.LogError("Failed to load contributor information due to: {message}", e.Message);
+                logger.LogError("Failed to load contributor information due to: {message}", e.Message);
             }
         }
     }

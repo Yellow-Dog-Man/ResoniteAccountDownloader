@@ -5,7 +5,6 @@ using ReactiveUI.Fody.Helpers;
 using ResoniteAccountDownloader.Extensions;
 using ResoniteAccountDownloader.Services;
 using ResoniteAccountDownloader.Utilities;
-using Splat;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -90,12 +89,12 @@ public class DownloadSelectionViewModel : ViewModelBase, IAccountDownloadConfig
     [Reactive]
     public bool DownloadExitMessages { get; set; } = false;
 
-    public DownloadSelectionViewModel()
+    public DownloadSelectionViewModel(IScreen hostScreen, IViewModelFactory viewModels, IAppCloudService cloudService, IGroupsService groupService, IStorageService storageService)
+        : base(hostScreen, viewModels)
     {
-        // Most of these will never trigger as our config is static, but Nullables make us do this and I kinda like how it'll point to a config issue.
-        CloudService = Locator.Current.GetService<IAppCloudService>() ?? throw new NullReferenceException("Cannot download without an app service");
-        GroupService = Locator.Current.GetService<IGroupsService>() ?? throw new NullReferenceException("Cannot download without a group service");
-        StorageService = Locator.Current.GetService<IStorageService>() ?? throw new NullReferenceException("Cannot download without a storage service");
+        CloudService = cloudService;
+        GroupService = groupService;
+        StorageService = storageService;
 
         // The OpenFile command is bound to a button/menu item in the UI.
         OpenFolder = ReactiveCommand.CreateFromTask(PickDownloadFolder);
@@ -172,7 +171,7 @@ public class DownloadSelectionViewModel : ViewModelBase, IAccountDownloadConfig
 
     private async Task StartDownloadFn()
     {
-        await Router.Navigate.Execute(new ProgressViewModel(this));
+        await Navigate<ProgressViewModel>(this);
     }
 
     private async Task PickDownloadFolder()

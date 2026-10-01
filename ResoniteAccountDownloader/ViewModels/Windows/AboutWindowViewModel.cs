@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-using ReactiveUI;
+﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
-
-using ResoniteAccountDownloader.Services;
 using ResoniteAccountDownloader.Models;
+using ResoniteAccountDownloader.Services;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace ResoniteAccountDownloader.ViewModels
 {
@@ -18,18 +16,22 @@ namespace ResoniteAccountDownloader.ViewModels
         [Reactive]
         public string AppCompany { get; set; }
 
+        [Reactive]
+        public string DotNetVersion { get; set; }
+
         private ContributionsService ContributionsService { get; set; }
 
         public List<Contributor>? Contributors => ContributionsService.Contributors;
 
         private readonly IAssemblyInfoService _assemblyInfoService;
 
-        public AboutWindowViewModel()
+        public AboutWindowViewModel(IAssemblyInfoService assemblyInfoService, ContributionsService contributionsService)
         {
-            _assemblyInfoService = Locator.Current.GetService<IAssemblyInfoService>() ?? throw new NullReferenceException("No version info");
-            ContributionsService =  Locator.Current.GetService<ContributionsService>() ?? throw new NullReferenceException("No contributor information available");
+            _assemblyInfoService = assemblyInfoService;
+            ContributionsService = contributionsService;
             AppVersion = _assemblyInfoService.Version;
             AppCompany = _assemblyInfoService.CompanyName;
+            DotNetVersion = _assemblyInfoService.DotNetVersion;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Reactive;
+using System.Reactive;
 using ReactiveUI;
 
 namespace ResoniteAccountDownloader.ViewModels;
@@ -6,8 +6,8 @@ namespace ResoniteAccountDownloader.ViewModels;
 public class GettingStartedViewModel : ViewModelBase, IRoutableViewModel
 {
     public ReactiveCommand<Unit, IRoutableViewModel> Login { get; }
-    public GettingStartedViewModel()
+    public GettingStartedViewModel(IScreen hostScreen, IViewModelFactory viewModels) : base(hostScreen, viewModels)
     {
-        Login = ReactiveCommand.CreateFromObservable(() => Router.Navigate.Execute(new LoginViewModel()));
+        Login = ReactiveCommand.CreateFromObservable(() => Navigate<LoginViewModel>());
     }
 }

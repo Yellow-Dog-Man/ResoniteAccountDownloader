@@ -9,17 +9,17 @@ public class SkyFrostCloudService : IAppCloudService
 {
     private string _login = string.Empty;
     private string _password = string.Empty;
-    private readonly string _id;
-
 
     private readonly SkyFrostInterface _interface;
     private readonly ILogger logger;
+    private readonly IIdService IdGen;
 
-    public SkyFrostCloudService(SkyFrostInterface? cloudInterface, ILogger? logger)
+    public SkyFrostCloudService(SkyFrostInterface cloudInterface, ILogger<SkyFrostCloudService> logger, ILoggerFactory loggerFactory, IIdService idGen)
     {
-        _id = Guid.NewGuid().ToString();
-        _interface = cloudInterface ?? throw new NullReferenceException("Cannot run without a Resonite Account Downloader Interface");
-        this.logger = logger ?? throw new NullReferenceException("Cannot run without a Logger");
+        IdGen = idGen;
+        _interface = cloudInterface;
+        this.logger = logger;
+        Profile = new AppCloudUserProfile(loggerFactory.CreateLogger<AppCloudUserProfile>());
 
         _interface.Session.UserUpdated += OnUserUpdated;
 
@@ -32,14 +32,15 @@ public class SkyFrostCloudService : IAppCloudService
 
     public AuthenticationState AuthState { get; private set; }
 
-    public IUserProfile Profile { get; private set; } = new AppCloudUserProfile();
+    public IUserProfile Profile { get; private set; }
 
     public User User { get => _interface.CurrentUser; }
 
     public async Task<AuthResult> Login(string login, string password)
     {
         this.logger.LogInformation("Logging in user: {user}", login);
-        var loginResult = await _interface.Session.Login(login, new PasswordLogin() { Password=password}, _id, false, null).ConfigureAwait(false);
+
+        var loginResult = await _interface.Session.Login(login, new PasswordLogin(password), IdGen.SecretMachineId, false, null).ConfigureAwait(false);
         _login = login;
         _password = password;
         return ProcessLoginResult(loginResult);
@@ -64,7 +65,7 @@ public class SkyFrostCloudService : IAppCloudService
         //await _interface.UpdateCurrentUserInfo();
 
         // Flash the profile with the new data
-        Profile.UpdateUser(ResoniteUserAdapter.FromResoniteUser(_interface.CurrentUser));
+        Profile.UpdateUser(ResoniteUserAdapter.FromResoniteUser(_interface.CurrentUser, _interface));
     }
 
     private AuthResult ProcessLoginResult(CloudResult<UserSessionResult<UserSession>>? loginResult)
@@ -105,7 +106,7 @@ public class SkyFrostCloudService : IAppCloudService
     public async Task<AuthResult> SubmitTOTP(string code)
     {
         this.logger.LogInformation("{user} responded to TOTP Challenge",_login);
-        var loginResult = await _interface.Session.Login(_login, new PasswordLogin() { Password = _password }, _id, false, code).ConfigureAwait(false);
+        var loginResult = await _interface.Session.Login(_login, new PasswordLogin() { Password = _password }, IdGen.SecretMachineId, false, code).ConfigureAwait(false);
         this.logger.LogDebug("Returned from TOTP Login");
         return ProcessLoginResult(loginResult);
     }

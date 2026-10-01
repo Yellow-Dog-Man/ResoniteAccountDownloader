@@ -157,13 +157,13 @@ namespace ResoniteAccountDownloader.Views
             message.SetOutput(InteractionResult<YesNo>.WithResult(res));
         }
 
-        public async Task ShowAboutWindow(IInteractionContext<Unit, Unit> obj)
+        public async Task ShowAboutWindow(IInteractionContext<AboutWindowViewModel, Unit> obj)
         {
             obj.SetOutput(Unit.Default);
 
             var about = new AboutWindowView
             {
-                DataContext = new AboutWindowViewModel(),
+                DataContext = obj.Input,
             };
             await about.ShowDialog(this);
         }

@@ -4,7 +4,6 @@ using ResoniteAccountDownloader.Services;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
-using Splat;
 using ReactiveUI.Validation.Contexts;
 using ReactiveUI.Validation.Extensions;
 using System.Reactive.Linq;
@@ -21,13 +20,13 @@ public class MultiFactorAuthViewModel : ViewModelBase, IValidatableViewModel
 
     public ReactiveCommand<Unit, AuthResult> SubmitTOTP { get; set; }
 
-    public ValidationContext ValidationContext { get; } = new ValidationContext();
+    public IValidationContext ValidationContext { get; } = new ValidationContext();
 
     public Interaction<string?, Unit> ShowError { get; }
 
-    public MultiFactorAuthViewModel()
+    public MultiFactorAuthViewModel(IScreen hostScreen, IViewModelFactory viewModels, IAppCloudService cloudService) : base(hostScreen, viewModels)
     {
-        CloudService = Locator.Current.GetService<IAppCloudService>() ?? throw new ArgumentNullException("Cannot login without an app service");
+        CloudService = cloudService;
 
         ShowError = new Interaction<string?, Unit>();
 
@@ -44,7 +43,7 @@ public class MultiFactorAuthViewModel : ViewModelBase, IValidatableViewModel
             }
             if (result.state == AuthenticationState.Authenticated)
             {
-                await Router.Navigate.Execute(new DownloadSelectionViewModel());
+                await Navigate<DownloadSelectionViewModel>();
                 return;
             }
 
@@ -52,7 +51,7 @@ public class MultiFactorAuthViewModel : ViewModelBase, IValidatableViewModel
 
             // We have to return back to the login screen as regular username and password credentials are not checked until after the TOTP
             // token is entered correctly.
-            await Router.Navigate.Execute(new LoginViewModel());
+            await Navigate<LoginViewModel>();
         });
     }
 }

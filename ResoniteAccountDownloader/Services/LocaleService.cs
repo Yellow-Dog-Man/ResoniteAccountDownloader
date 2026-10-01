@@ -63,9 +63,9 @@ namespace ResoniteAccountDownloader.Services
             SetLanguage(model.Code);
         }
 
-        public LocaleService(ILogger? logger)
+        public LocaleService(ILogger<LocaleService> logger)
         {
-            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            Logger = logger;
 
             AvailableLocales = AvailableCultures.Select(CreateLocaleModel).ToList();
 

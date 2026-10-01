@@ -7,6 +7,7 @@
         Width="650" Height="300"
         x:Class="ResoniteAccountDownloader.Views.AboutWindowView"
         xmlns:vm="using:ResoniteAccountDownloader.ViewModels"
+        xmlns:m="using:ResoniteAccountDownloader.Models"
         x:DataType="vm:AboutWindowViewModel"
         x:CompileBindings="True"
         xmlns:v="clr-namespace:ResoniteAccountDownloader.Views"
@@ -47,18 +48,25 @@
         </TextBlock.Text>
       </TextBlock>
     </StackPanel>
-    <TextBlock Text="{x:Static p:Resources.BasedOnOriginalWork}" />
+    <TextBlock HorizontalAlignment="Left">
+      <TextBlock.Text>
+        <MultiBinding StringFormat="{}{0} :{1}">
+          <Binding Source="{x:Static p:Resources.DotNetVersion}" />
+          <Binding Path="DotNetVersion" />
+        </MultiBinding>
+      </TextBlock.Text>
+    </TextBlock>
     <TextBlock Text="{x:Static p:Resources.WithContributionsFrom}" />
     <ScrollViewer Height="160" AllowAutoHide="False">
-      <ItemsRepeater ItemsSource="{Binding Contributors}:">
+      <ItemsRepeater ItemsSource="{Binding Contributors}">
         <ItemsRepeater.Layout>
           <UniformGridLayout MinColumnSpacing="6"
                              MinRowSpacing="6"
                              ItemsStretch="Fill"/>
         </ItemsRepeater.Layout>
         <ItemsRepeater.ItemTemplate>
-          <DataTemplate>
-            <v:ContributorProfileView DataContext="{Binding .}" Width="200"/>
+          <DataTemplate x:DataType="m:Contributor">
+            <v:ContributorProfileView Width="200"/>
           </DataTemplate>
         </ItemsRepeater.ItemTemplate>
       </ItemsRepeater>
