@@ -80,8 +80,8 @@ public class ResoniteAccountDownloadManager : IAccountDownloader
 
         // We do not include the user's username here as Resonite Account Downloader takes care of this.
         // It'll store items owned by a user in a folder based on their User ID.
-        var local = new SkyFrost.Base.LocalAccountDataStore(Interface.Platform, Interface.CurrentUser.Id, config.FilePath, config.FilePath + "/Assets");
-        Controller = new SkyFrost.Base.AccountTransferController(new SkyFrost.Base.CloudAccountDataStore(Interface), local, Guid.NewGuid().ToString(), libraryConfig);
+        var local = new LocalAccountDataStore(Interface.Platform, Interface.CurrentUser.Id, config.FilePath, config.FilePath + "/Assets");
+        Controller = new AccountTransferController(new CloudAccountDataStore(Interface), local, Guid.CreateVersion7().ToString(), libraryConfig);
         Controller.ProgressMessagePosted += SurfaceProgressMessage;
 
         // Wrap the Status Model.
