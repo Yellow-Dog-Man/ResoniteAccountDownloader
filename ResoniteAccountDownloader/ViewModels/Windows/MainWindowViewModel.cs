@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using ResoniteAccountDownloader.Services;
 using ResoniteAccountDownloader.Utilities;
 using ReactiveUI;
-using Splat;
 
 namespace ResoniteAccountDownloader.ViewModels;
 
@@ -23,17 +22,17 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     public ReactiveCommand<string, Unit> SetLanguageCommand { get; }
 
     private ILocaleService LocaleService { get; }
+    private IViewModelFactory ViewModels { get; }
+    private Config Config { get; }
 
     public IEnumerable<MenuItemViewModel> MenuItems { get; }
-    public MainWindowViewModel()
+    public MainWindowViewModel(ILocaleService localeService, IViewModelFactory viewModels, Config config)
     {
         Router = new RoutingState();
 
-        LocaleService = Locator.Current.GetService<ILocaleService>() ?? throw new NullReferenceException("No available Locale Service");
-
-        // Register this view model with the DI container, this way we aren't passing around the main router over and over.
-        Locator.CurrentMutable.RegisterConstant(this, typeof(IScreen));
-        Locator.CurrentMutable.RegisterConstant(this, typeof(MainWindowViewModel));
+        LocaleService = localeService;
+        ViewModels = viewModels;
+        Config = config;
 
         OpenLogFolder = ReactiveCommand.CreateFromTask(() => OpenLogFolderFn());
         ShowAbout = ReactiveCommand.CreateFromTask(() => ShowAboutFn());
@@ -65,7 +64,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
             }
         };
 
-        Router.Navigate.Execute(new GettingStartedViewModel());
+        Router.Navigate.Execute(ViewModels.Create<GettingStartedViewModel>(this));
 
         LocaleService.LocaleChanged += LocaleService_LocaleChanged;
     }
@@ -79,19 +78,11 @@ public class MainWindowViewModel : ReactiveObject, IScreen
 
     private async Task ShowAboutFn()
     {
-        await GlobalInteractions.ShowAboutWindow.Handle(Unit.Default);
+        await GlobalInteractions.ShowAboutWindow.Handle(ViewModels.Create<AboutWindowViewModel>());
     }
 
     public async Task OpenLogFolderFn()
     {
-        var config = Locator.Current.GetService<Config>();
-
-        if (config == null)
-        {
-            await GlobalInteractions.ShowError.Handle(new MessageBoxRequest("Cannot find Log folder."));
-
-            return;
-        }
-        await GlobalInteractions.OpenFolderLocation.Handle(config.LogFolder);
+        await GlobalInteractions.OpenFolderLocation.Handle(Config.LogFolder);
     }
 }

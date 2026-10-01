@@ -15,11 +15,12 @@ public class SkyFrostCloudService : IAppCloudService
     private readonly SkyFrostInterface _interface;
     private readonly ILogger logger;
 
-    public SkyFrostCloudService(SkyFrostInterface? cloudInterface, ILogger? logger)
+    public SkyFrostCloudService(SkyFrostInterface cloudInterface, ILogger<SkyFrostCloudService> logger, ILoggerFactory loggerFactory)
     {
         _id = Guid.CreateVersion7().ToString();
-        _interface = cloudInterface ?? throw new NullReferenceException("Cannot run without a Resonite Account Downloader Interface");
-        this.logger = logger ?? throw new NullReferenceException("Cannot run without a Logger");
+        _interface = cloudInterface;
+        this.logger = logger;
+        Profile = new AppCloudUserProfile(loggerFactory.CreateLogger<AppCloudUserProfile>());
 
         _interface.Session.UserUpdated += OnUserUpdated;
 
@@ -32,7 +33,7 @@ public class SkyFrostCloudService : IAppCloudService
 
     public AuthenticationState AuthState { get; private set; }
 
-    public IUserProfile Profile { get; private set; } = new AppCloudUserProfile();
+    public IUserProfile Profile { get; private set; }
 
     public User User { get => _interface.CurrentUser; }
 
@@ -65,7 +66,7 @@ public class SkyFrostCloudService : IAppCloudService
         //await _interface.UpdateCurrentUserInfo();
 
         // Flash the profile with the new data
-        Profile.UpdateUser(ResoniteUserAdapter.FromResoniteUser(_interface.CurrentUser));
+        Profile.UpdateUser(ResoniteUserAdapter.FromResoniteUser(_interface.CurrentUser, _interface));
     }
 
     private AuthResult ProcessLoginResult(CloudResult<UserSessionResult<UserSession>>? loginResult)

@@ -1,8 +1,7 @@
-﻿using Avalonia;
+using Avalonia;
 using System;
 using Avalonia.ReactiveUI;
-using Splat;
-
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ResoniteAccountDownloader.Services;
 
@@ -15,29 +14,26 @@ namespace ResoniteAccountDownloader
         // yet and stuff might break.
         [STAThread]
         public static void Main(string[] args) {
-            Boostrapper.Register(Locator.CurrentMutable, Locator.Current);
-            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            // Disposing the provider on exit flushes the logs.
+            using var services = Boostrapper.BuildServiceProvider();
+
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            var config = services.GetRequiredService<Config>();
+            var info = services.GetRequiredService<IAssemblyInfoService>();
+
+            logger.LogInformation("Starting up {AppName} v{Version}", info.Name, info.Version);
+            logger.LogInformation("Log Level: {LogLevel}", config.LogLevel);
+
+            BuildAvaloniaApp(() => new App(services)).StartWithClassicDesktopLifetime(args);
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.
-        public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
+        public static AppBuilder BuildAvaloniaApp() => BuildAvaloniaApp(() => new App());
+
+        private static AppBuilder BuildAvaloniaApp(Func<App> appFactory)
+            => AppBuilder.Configure(appFactory)
                 .UsePlatformDetect()
                 .LogToTrace()
-                .UseReactiveUI()
-                .AfterSetup(AfterStartup);
-
-        private static void AfterStartup(AppBuilder obj)
-        {
-            var logger = Locator.Current.GetService<ILogger>();
-            var config = Locator.Current.GetService<Config>();
-            var info = Locator.Current.GetService<IAssemblyInfoService>();
-            if (logger == null)
-                return;
-
-            logger.LogInformation($"Starting up {info!.Name} v{info!.Version}");
-            logger.LogInformation($"Log Level: ${config!.LogLevel}");
-
-        }
+                .UseReactiveUI();
     }
 }

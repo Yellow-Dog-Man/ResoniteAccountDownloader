@@ -1,7 +1,8 @@
-﻿using Avalonia;
+using System;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Splat;
+using Microsoft.Extensions.DependencyInjection;
 using ResoniteAccountDownloader.ViewModels;
 using ResoniteAccountDownloader.Views;
 
@@ -9,6 +10,18 @@ namespace ResoniteAccountDownloader
 {
     public partial class App : Application
     {
+        private readonly IServiceProvider? _services;
+
+        // Used by the visual designer, which has no services.
+        public App()
+        {
+        }
+
+        public App(IServiceProvider services)
+        {
+            _services = services;
+        }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -16,11 +29,11 @@ namespace ResoniteAccountDownloader
 
         public override void OnFrameworkInitializationCompleted()
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            if (_services != null && ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindowView
                 {
-                    DataContext = Locator.Current.GetService<MainWindowViewModel>(),
+                    DataContext = _services.GetRequiredService<MainWindowViewModel>(),
                 };
             }
 

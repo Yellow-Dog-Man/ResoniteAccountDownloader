@@ -27,7 +27,7 @@ public class CompleteViewModel : ViewModelBase
     public ReactiveCommand<Unit, IRoutableViewModel> StartAnotherDownload { get; }
     public ReactiveCommand<Unit, Unit> OpenDownloadFolder { get; }
     public ReactiveCommand<Unit, Unit> Exit { get; }
-    public CompleteViewModel(IAccountDownloadConfig config, IAccountDownloadStatus status)
+    public CompleteViewModel(IScreen hostScreen, IViewModelFactory viewModels, IAccountDownloadConfig config, IAccountDownloadStatus status) : base(hostScreen, viewModels)
     {
         Status = status;
         Config = config;
@@ -45,7 +45,7 @@ public class CompleteViewModel : ViewModelBase
         if (list.Count > 0 || Status.AssetFailures.Count > 0)
             ShouldShowFailureMessage = true;
 
-        StartAnotherDownload = ReactiveCommand.CreateFromObservable(() => Router.Navigate.Execute(new DownloadSelectionViewModel()));
+        StartAnotherDownload = ReactiveCommand.CreateFromObservable(() => Navigate<DownloadSelectionViewModel>());
         OpenDownloadFolder = ReactiveCommand.CreateFromTask(() => OpenDownloadFolderFn());
 
         Exit = ReactiveCommand.Create(ExitFn);

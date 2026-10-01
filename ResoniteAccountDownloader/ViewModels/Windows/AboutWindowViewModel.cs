@@ -2,7 +2,6 @@
 using ReactiveUI.Fody.Helpers;
 using ResoniteAccountDownloader.Models;
 using ResoniteAccountDownloader.Services;
-using Splat;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -26,10 +25,10 @@ namespace ResoniteAccountDownloader.ViewModels
 
         private readonly IAssemblyInfoService _assemblyInfoService;
 
-        public AboutWindowViewModel()
+        public AboutWindowViewModel(IAssemblyInfoService assemblyInfoService, ContributionsService contributionsService)
         {
-            _assemblyInfoService = Locator.Current.GetService<IAssemblyInfoService>() ?? throw new NullReferenceException("No version info");
-            ContributionsService =  Locator.Current.GetService<ContributionsService>() ?? throw new NullReferenceException("No contributor information available");
+            _assemblyInfoService = assemblyInfoService;
+            ContributionsService = contributionsService;
             AppVersion = _assemblyInfoService.Version;
             AppCompany = _assemblyInfoService.CompanyName;
             DotNetVersion = _assemblyInfoService.DotNetVersion;

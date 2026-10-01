@@ -33,11 +33,11 @@ public class ResoniteAccountDownloadManager : IAccountDownloader
 
     private readonly DispatcherTimer StatsTimer = new();
 
-    public ResoniteAccountDownloadManager(SkyFrostInterface? cloudInterface, ILogger? logger, ILoggerFactory? loggerFactory)
+    public ResoniteAccountDownloadManager(SkyFrostInterface cloudInterface, ILogger<ResoniteAccountDownloadManager> logger, ILoggerFactory loggerFactory)
     {
-        Logger = logger ?? throw new NullReferenceException("Cannot run without a logger"); 
-        LogFactory = loggerFactory ?? throw new NullReferenceException("Cannot run without a logger"); 
-        Interface = cloudInterface ?? throw new NullReferenceException("Cannot run without a Resonite Account Downloader Interface");
+        Logger = logger;
+        LogFactory = loggerFactory;
+        Interface = cloudInterface;
         StatsTimer.Interval = TimeSpan.FromSeconds(1);
         StatsTimer.Tick += StatsTimer_Tick;
     }

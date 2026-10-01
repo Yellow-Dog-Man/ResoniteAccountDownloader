@@ -5,7 +5,6 @@ using ResoniteAccountDownloader.Utilities;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
 using AccountOperationUtilities.Interfaces;
 
 namespace ResoniteAccountDownloader.Services;
@@ -19,19 +18,19 @@ public class AppCloudUserProfile : ReactiveObject, IUserProfile
     [Reactive]
     public Uri PictureURI { get; set; } = AssetHelper.GetUri("AnonymousHeadset.png");
 
-    private static ILogger? Logger;
+    private readonly ILogger Logger;
 
-    public AppCloudUserProfile(IUser? user = null)
+    public AppCloudUserProfile(ILogger<AppCloudUserProfile> logger, IUser? user = null)
     {
+        Logger = logger;
+
         if (user != null)
             UpdateUser(user);
-
-        Logger = Locator.Current.GetService<ILogger>() ?? throw new NullReferenceException("No logger found");
     }
 
     public void UpdateUser(IUser? user)
     {
-        Logger?.LogDebug($"Updating user New:{user?.Username}, Old:{UserName} ");
+        Logger.LogDebug($"Updating user New:{user?.Username}, Old:{UserName} ");
         if (user == null)
             return;
 

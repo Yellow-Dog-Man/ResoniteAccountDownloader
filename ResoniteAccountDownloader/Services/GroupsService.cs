@@ -41,12 +41,11 @@ namespace ResoniteAccountDownloader.Services
         private SkyFrostInterface Interface { get; }
         private ILogger Log { get; }
         private IStorageService StorageService { get; }
-        public GroupsService(SkyFrostInterface? cloudInterface, IStorageService? storageService, ILogger? logger)
+        public GroupsService(SkyFrostInterface cloudInterface, IStorageService storageService, ILogger<GroupsService> logger)
         {
-
-            Interface = cloudInterface ?? throw new ArgumentNullException(nameof(cloudInterface));
-            StorageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
-            Log = logger ?? throw new ArgumentNullException(nameof(logger));
+            Interface = cloudInterface;
+            StorageService = storageService;
+            Log = logger;
         }
         public async Task<List<IGroup>> GetGroups()
         {
