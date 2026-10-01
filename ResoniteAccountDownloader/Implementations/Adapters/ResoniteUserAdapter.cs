@@ -30,13 +30,15 @@ public class ResoniteUserAdapter : IUser
 
     private Uri? GetProfilePicture()
     {
-        Uri uri;
-        var success = Uri.TryCreate(User.Profile.IconUrl, UriKind.Absolute, out uri!);
-
-        if (!success)
+        if (User.Profile == null)
             return null;
 
-        return Interface.Assets.DBToHttp(uri, DB_Endpoint.Default);
+        Uri uri;
+
+        if (Uri.TryCreate(User.Profile.IconUrl, UriKind.Absolute, out uri!))
+            return Interface.Assets.DBToHttp(uri, DB_Endpoint.Default);
+        else
+            return null;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
