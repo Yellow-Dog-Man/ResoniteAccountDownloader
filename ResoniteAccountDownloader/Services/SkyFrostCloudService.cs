@@ -9,15 +9,14 @@ public class SkyFrostCloudService : IAppCloudService
 {
     private string _login = string.Empty;
     private string _password = string.Empty;
-    private readonly string _id;
-
 
     private readonly SkyFrostInterface _interface;
     private readonly ILogger logger;
+    private readonly IIdService IdGen;
 
-    public SkyFrostCloudService(SkyFrostInterface cloudInterface, ILogger<SkyFrostCloudService> logger, ILoggerFactory loggerFactory)
+    public SkyFrostCloudService(SkyFrostInterface cloudInterface, ILogger<SkyFrostCloudService> logger, ILoggerFactory loggerFactory, IIdService idGen)
     {
-        _id = Guid.CreateVersion7().ToString();
+        IdGen = idGen;
         _interface = cloudInterface;
         this.logger = logger;
         Profile = new AppCloudUserProfile(loggerFactory.CreateLogger<AppCloudUserProfile>());
@@ -41,7 +40,7 @@ public class SkyFrostCloudService : IAppCloudService
     {
         this.logger.LogInformation("Logging in user: {user}", login);
 
-        var loginResult = await _interface.Session.Login(login, new PasswordLogin(password), _id, false, null).ConfigureAwait(false);
+        var loginResult = await _interface.Session.Login(login, new PasswordLogin(password), IdGen.SecretMachineId, false, null).ConfigureAwait(false);
         _login = login;
         _password = password;
         return ProcessLoginResult(loginResult);
@@ -107,7 +106,7 @@ public class SkyFrostCloudService : IAppCloudService
     public async Task<AuthResult> SubmitTOTP(string code)
     {
         this.logger.LogInformation("{user} responded to TOTP Challenge",_login);
-        var loginResult = await _interface.Session.Login(_login, new PasswordLogin() { Password = _password }, _id, false, code).ConfigureAwait(false);
+        var loginResult = await _interface.Session.Login(_login, new PasswordLogin() { Password = _password }, IdGen.SecretMachineId, false, code).ConfigureAwait(false);
         this.logger.LogDebug("Returned from TOTP Login");
         return ProcessLoginResult(loginResult);
     }

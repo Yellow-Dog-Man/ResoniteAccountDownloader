@@ -30,16 +30,18 @@ public class ResoniteAccountDownloadManager : IAccountDownloader
 
     private readonly ILogger Logger;
     private readonly ILoggerFactory LogFactory;
+    private readonly IIdService IdGen;
 
     private readonly DispatcherTimer StatsTimer = new();
 
-    public ResoniteAccountDownloadManager(SkyFrostInterface cloudInterface, ILogger<ResoniteAccountDownloadManager> logger, ILoggerFactory loggerFactory)
+    public ResoniteAccountDownloadManager(SkyFrostInterface cloudInterface, ILogger<ResoniteAccountDownloadManager> logger, ILoggerFactory loggerFactory, IIdService idGen)
     {
         Logger = logger;
         LogFactory = loggerFactory;
         Interface = cloudInterface;
         StatsTimer.Interval = TimeSpan.FromSeconds(1);
         StatsTimer.Tick += StatsTimer_Tick;
+        IdGen = idGen;
     }
 
     private void StatsTimer_Tick(object? sender, EventArgs e)
@@ -83,7 +85,7 @@ public class ResoniteAccountDownloadManager : IAccountDownloader
         // We do not include the user's username here as Resonite Account Downloader takes care of this.
         // It'll store items owned by a user in a folder based on their User ID.
         var local = new LocalAccountDataStore(Interface.Platform, Interface.CurrentUser.Id, config.FilePath, config.FilePath + "/Assets");
-        Controller = new AccountTransferController(new CloudAccountDataStore(Interface, LogFactory.CreateLogger<CloudAccountDataStore>()), local, Guid.CreateVersion7().ToString(), libraryConfig);
+        Controller = new AccountTransferController(new CloudAccountDataStore(Interface, LogFactory.CreateLogger<CloudAccountDataStore>()), local, IdGen.CreateId(), libraryConfig);
         Controller.ProgressMessagePosted += SurfaceProgressMessage;
 
         // Wrap the Status Model.

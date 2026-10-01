@@ -1,4 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ResoniteAccountDownloader.Services;
 using ResoniteAccountDownloader.ViewModels;
@@ -48,10 +48,10 @@ namespace ResoniteAccountDownloader
                 .AddSerilog(CreateSerilogLogger(info, config), dispose: true));
 
             // Registering this as non-lazy because it is quite slow to init.
-            services.AddSingleton(new SkyFrostInterface(UID.Compute(), Guid.CreateVersion7().ToString(), SkyFrostConfig.DEFAULT_PRODUCTION.WithUserAgent(info.NameNoSpaces).WithoutSignalR()));
 
             services.AddSingleton<ILocaleService, LocaleService>();
             services.AddSingleton<IAppCloudService, SkyFrostCloudService>();
+            services.AddSingleton<IIdService, IdService>();
             services.AddSingleton<ContributionsService>();
             services.AddTransient<IAccountDownloader, ResoniteAccountDownloadManager>();
             services.AddTransient<IStorageService, CloudStorageService>();
@@ -59,6 +59,10 @@ namespace ResoniteAccountDownloader
 
             services.AddSingleton<IViewModelFactory, ViewModelFactory>();
             services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton((sp) => {
+                var idGen = sp.GetRequiredService<IIdService>();
+                return new SkyFrostInterface(idGen.UID, idGen.SecretMachineId, SkyFrostConfig.DEFAULT_PRODUCTION.WithUserAgent(info.NameNoSpaces).WithoutSignalR());
+            });
 
             return services.BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
         }
