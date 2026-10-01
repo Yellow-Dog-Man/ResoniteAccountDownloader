@@ -619,6 +619,22 @@
             Actual Content of this comment
             </summary>
         </member>
+        <member name="T:SkyFrost.Base.ConfigFileData">
+            <summary>
+            This class represets a configuration file that should be automatically installed at a location.
+            This allow for registration/login to add additional configuration files relevant to the particular user.
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.ConfigFileData.Path">
+            <summary>
+            Relative path at which the file should be installed
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.ConfigFileData.Content">
+            <summary>
+            The content of the file - the actual configuration itself
+            </summary>
+        </member>
         <!-- Badly formed XML comment ignored for member "T:SkyFrost.Base.EntityInterfacePreference" -->
         <member name="F:SkyFrost.Base.EntityInterfacePreference.UserPreferred">
             <summary>
@@ -1301,22 +1317,6 @@
             Used by Resonite to ensure that we only process this once. 
             </summary>
         </member>
-        <member name="T:SkyFrost.Base.ConfigFileData">
-            <summary>
-            This class represets a configuration file that should be automatically installed at a location.
-            This allow for registration/login to add additional configuration files relevant to the particular user.
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.ConfigFileData.Path">
-            <summary>
-            Relative path at which the file should be installed
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.ConfigFileData.Content">
-            <summary>
-            The content of the file - the actual configuration itself
-            </summary>
-        </member>
         <member name="P:SkyFrost.Base.DiscordIdentity.DiscordId">
             <summary>
             The unique ID of the Discord user.
@@ -1840,6 +1840,72 @@
             The primary group for this universe. Replaces Platform group in Universe specific features.
             </summary>
         </member>
+        <member name="T:SkyFrost.Base.UserSession">
+            <summary>
+            Represents an individual session for a user who is logged in. Lasts until the Token has expired, or invalidated.
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.UserId">
+            <summary>
+            User ID of the Logged In User
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.SessionToken">
+            <summary>
+            Token for this session
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.SessionCreated">
+            <summary>
+            Timestamp for when this session and token were created
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.SessionExpire">
+            <summary>
+            Timestamp for when this session and token expire
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.SecretMachineIdHash">
+            <summary>
+            Hash of the SecretMachineId used to create this session
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.SecretMachineIdSalt">
+            <summary>
+            Salt used to produce the SecretMachineId hash
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.RememberMe">
+            <summary>
+            True, if the user has elected for this Login Session to be "Remembered" in app.
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.IsMachineBound">
+            <summary>
+            Indicates that this token is bound to specific machine, meaning that the token needs to be hashed with the
+            secret machine ID and UID, to produce raw token.
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.LogoutUrl">
+            <summary>
+            URL that needs to be opened to finalize the logout. This is typically used with external authentication services
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.LogoutUrlClientSide">
+            <summary>
+            Determines if the logout URL needs to be opened client side (typically opening in user's web browser)
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.OriginalLoginType">
+            <summary>
+            The type of login (password, OAuth, SAML 2.0 ...) that this session was created from
+            </summary>
+        </member>
+        <member name="P:SkyFrost.Base.UserSession.SessionLoginCounter">
+            <summary>
+            This is incremented each time a new user session is created from another one (for RememberMe logins)
+            </summary>
+        </member>
         <member name="P:SkyFrost.Base.BroadcastTarget.Group">
             <summary>
             The general group that the information is being broadcasted to
@@ -2155,72 +2221,6 @@
             <typeparam name="T"></typeparam>
             <param name="filter"></param>
             <returns></returns>
-        </member>
-        <member name="T:SkyFrost.Base.UserSession">
-            <summary>
-            Represents an individual session for a user who is logged in. Lasts until the Token has expired, or invalidated.
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.UserId">
-            <summary>
-            User ID of the Logged In User
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.SessionToken">
-            <summary>
-            Token for this session
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.SessionCreated">
-            <summary>
-            Timestamp for when this session and token were created
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.SessionExpire">
-            <summary>
-            Timestamp for when this session and token expire
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.SecretMachineIdHash">
-            <summary>
-            Hash of the SecretMachineId used to create this session
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.SecretMachineIdSalt">
-            <summary>
-            Salt used to produce the SecretMachineId hash
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.RememberMe">
-            <summary>
-            True, if the user has elected for this Login Session to be "Remembered" in app.
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.IsMachineBound">
-            <summary>
-            Indicates that this token is bound to specific machine, meaning that the token needs to be hashed with the
-            secret machine ID and UID, to produce raw token.
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.LogoutUrl">
-            <summary>
-            URL that needs to be opened to finalize the logout. This is typically used with external authentication services
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.LogoutUrlClientSide">
-            <summary>
-            Determines if the logout URL needs to be opened client side (typically opening in user's web browser)
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.OriginalLoginType">
-            <summary>
-            The type of login (password, OAuth, SAML 2.0 ...) that this session was created from
-            </summary>
-        </member>
-        <member name="P:SkyFrost.Base.UserSession.SessionLoginCounter">
-            <summary>
-            This is incremented each time a new user session is created from another one (for RememberMe logins)
-            </summary>
         </member>
         <member name="F:SkyFrost.Base.UserTags.SuperAdmin">
             <remarks>

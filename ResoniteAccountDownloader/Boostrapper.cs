@@ -1,4 +1,5 @@
-﻿using ResoniteAccountDownloader.Services;
+﻿using Microsoft.Extensions.Logging;
+using ResoniteAccountDownloader.Services;
 using ResoniteAccountDownloader.ViewModels;
 using Serilog;
 using Serilog.Events;
@@ -71,7 +72,7 @@ namespace ResoniteAccountDownloader
             services.RegisterLazySingleton<IAppCloudService>(() => new SkyFrostCloudService(resolve.GetService<SkyFrostInterface>(), resolve.GetService<ILogger>()));
 
             services.RegisterLazySingleton(() => new MainWindowViewModel());
-            services.Register<IAccountDownloader>(() => new ResoniteAccountDownloadManager(resolve.GetService<SkyFrostInterface>(), resolve.GetService<ILogger>()));
+            services.Register<IAccountDownloader>(() => new ResoniteAccountDownloadManager(resolve.GetService<SkyFrostInterface>(), resolve.GetService<ILogger>(), resolve.GetService<ILoggerFactory>()));
             services.Register<IStorageService>(() => new CloudStorageService(resolve.GetService<SkyFrostInterface>(), resolve.GetService<ILogger>()));
             services.Register<IGroupsService>(() => new GroupsService(resolve.GetService<SkyFrostInterface>(), resolve.GetService<IStorageService>(), resolve.GetService<ILogger>()));
             services.RegisterLazySingleton(() => new ContributionsService(resolve.GetService<ILogger>()));

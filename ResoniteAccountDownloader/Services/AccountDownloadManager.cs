@@ -29,12 +29,14 @@ public class ResoniteAccountDownloadManager : IAccountDownloader
     private CancellationTokenSource? CancelTokenSource = null;
 
     private readonly ILogger Logger;
+    private readonly ILoggerFactory LogFactory;
 
     private readonly DispatcherTimer StatsTimer = new();
 
-    public ResoniteAccountDownloadManager(SkyFrostInterface? cloudInterface, ILogger? logger)
+    public ResoniteAccountDownloadManager(SkyFrostInterface? cloudInterface, ILogger? logger, ILoggerFactory? loggerFactory)
     {
-        Logger = logger ?? throw new NullReferenceException("Cannot run without a logger"); ;
+        Logger = logger ?? throw new NullReferenceException("Cannot run without a logger"); 
+        LogFactory = loggerFactory ?? throw new NullReferenceException("Cannot run without a logger"); 
         Interface = cloudInterface ?? throw new NullReferenceException("Cannot run without a Resonite Account Downloader Interface");
         StatsTimer.Interval = TimeSpan.FromSeconds(1);
         StatsTimer.Tick += StatsTimer_Tick;
@@ -81,7 +83,7 @@ public class ResoniteAccountDownloadManager : IAccountDownloader
         // We do not include the user's username here as Resonite Account Downloader takes care of this.
         // It'll store items owned by a user in a folder based on their User ID.
         var local = new LocalAccountDataStore(Interface.Platform, Interface.CurrentUser.Id, config.FilePath, config.FilePath + "/Assets");
-        Controller = new AccountTransferController(new CloudAccountDataStore(Interface), local, Guid.CreateVersion7().ToString(), libraryConfig);
+        Controller = new AccountTransferController(new CloudAccountDataStore(Interface, LogFactory.CreateLogger<CloudAccountDataStore>()), local, Guid.CreateVersion7().ToString(), libraryConfig);
         Controller.ProgressMessagePosted += SurfaceProgressMessage;
 
         // Wrap the Status Model.
