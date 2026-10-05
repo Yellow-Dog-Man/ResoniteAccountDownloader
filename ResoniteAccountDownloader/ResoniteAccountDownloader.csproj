@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.22" />
+    <PackageReference Include="Avalonia" Version="12.0.0" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.22" />
 
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
@@ -81,7 +81,7 @@
     <PackageReference Include="SerilogTraceListener" Version="3.2.1-dev-00011" />
 
     <!-- Avalonia addons -->
-    <PackageReference Include="AsyncImageLoader.Avalonia" Version="3.7.0" />
+    <PackageReference Include="AsyncImageLoader.Avalonia" Version="4.0.0" />
     <PackageReference Include="MessageBox.Avalonia" Version="3.3.1.1" />
     <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.10.10" />
     <PackageReference Include="YellowDogMan.Elements.Core" Version="1.2.0" />
